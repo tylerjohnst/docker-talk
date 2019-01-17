@@ -1,0 +1,26 @@
+version: '2.1'
+
+services:
+  web: &web
+    working_dir: /app
+    image: ruby:2.4-alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - rails_gems:/usr/local/bundle
+      - .:/app
+    command: rake web
+    depends_on:
+      - redis
+
+  # worker:
+  #   <<: *web
+  #   ports: []
+  #   command: rake worker
+
+  redis:
+    image: redis:alpine
+    command: --loglevel warning
+
+volumes:
+  rails_gems:
